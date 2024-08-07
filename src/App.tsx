@@ -18,12 +18,6 @@ const App: React.FC = () => {
       setTodo("");
     }
   };
-  useEffect(() => {
-    const completed = todos.filter((todo) => todo.isDone);
-    setCompletedTodos(completed);
-    const active = todos.filter((todo) => !todo.isDone);
-    setTodos(active);
-  }, []);
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
