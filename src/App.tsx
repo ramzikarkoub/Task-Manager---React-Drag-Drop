@@ -62,7 +62,13 @@ const App: React.FC = () => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="App">
-        <span className="heading">Task Tracker</span>
+        <h1 className="heading">Task Manager</h1>
+        <p className="description">
+          Drag and Drop React app with Typscript <br /> Add tasks and push ENTER
+          or clik GO.
+          <br /> you can drag and drop the tasks from active to completed, make
+          them completed, delete or edit them.
+        </p>
         <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
         <TodoList
           todos={todos}
