@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import InputField from "./components/InputField";
 import TodoList from "./components/TodoList";
@@ -8,7 +8,7 @@ import { Todo } from "./models/models";
 const App: React.FC = () => {
   const [todo, setTodo] = useState<string>("");
   const [todos, setTodos] = useState<Array<Todo>>([]);
-  const [CompletedTodos, setCompletedTodos] = useState<Array<Todo>>([]);
+  const [completedTodos, setCompletedTodos] = useState<Array<Todo>>([]);
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,11 +18,15 @@ const App: React.FC = () => {
       setTodo("");
     }
   };
+  useEffect(() => {
+    const completed = todos.filter((todo) => todo.isDone);
+    setCompletedTodos(completed);
+    const active = todos.filter((todo) => !todo.isDone);
+    setTodos(active);
+  }, []);
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
-
-    console.log(result);
 
     if (!destination) {
       return;
@@ -36,8 +40,9 @@ const App: React.FC = () => {
     }
 
     let add;
-    let active = todos;
-    let complete = CompletedTodos;
+    let active = [...todos];
+    let complete = [...completedTodos];
+
     // Source Logic
     if (source.droppableId === "TodosList") {
       add = active[source.index];
@@ -50,23 +55,25 @@ const App: React.FC = () => {
     // Destination Logic
     if (destination.droppableId === "TodosList") {
       active.splice(destination.index, 0, add);
+      add.isDone = false;
     } else {
+      add.isDone = true;
       complete.splice(destination.index, 0, add);
     }
 
-    setCompletedTodos(complete);
     setTodos(active);
+    setCompletedTodos(complete);
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="App">
-        <span className="heading">Taskify</span>
+        <span className="heading">Task Tracker</span>
         <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
         <TodoList
           todos={todos}
           setTodos={setTodos}
-          CompletedTodos={CompletedTodos}
+          CompletedTodos={completedTodos}
           setCompletedTodos={setCompletedTodos}
         />
       </div>

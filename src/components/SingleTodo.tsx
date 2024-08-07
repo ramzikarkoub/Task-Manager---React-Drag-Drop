@@ -4,13 +4,14 @@ import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
 import { Todo } from "../models/models";
 import { Draggable } from "react-beautiful-dnd";
-
-const SingleTodo: React.FC<{
+interface props {
   index: number;
   todo: Todo;
   todos: Array<Todo>;
   setTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
-}> = ({ index, todo, todos, setTodos }) => {
+}
+
+const SingleTodo: React.FC<props> = ({ index, todo, todos, setTodos }) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
 
@@ -37,6 +38,7 @@ const SingleTodo: React.FC<{
         todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
       )
     );
+    console.log(todos);
   };
 
   return (
@@ -57,11 +59,11 @@ const SingleTodo: React.FC<{
               ref={inputRef}
             />
           ) : todo.isDone ? (
-            <s className="todos__single--text">{todo.todo}</s>
+            <s className="todos__single--text red-strikethrough">{todo.todo}</s>
           ) : (
             <span className="todos__single--text">{todo.todo}</span>
           )}
-          <div>
+          <div className="icons">
             <span
               className="icon"
               onClick={() => {
@@ -70,13 +72,13 @@ const SingleTodo: React.FC<{
                 }
               }}
             >
-              <AiFillEdit />
+              <AiFillEdit className="icon icon-edit " />
             </span>
             <span className="icon" onClick={() => handleDelete(todo.id)}>
-              <AiFillDelete />
+              <AiFillDelete className="icon icon-delete" />
             </span>
-            <span className="icon" onClick={() => handleDone(todo.id)}>
-              <MdDone />
+            <span onClick={() => handleDone(todo.id)}>
+              <MdDone className="icon icon-done" />
             </span>
           </div>
         </form>
